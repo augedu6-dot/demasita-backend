@@ -6,7 +6,7 @@ const app = express();
 // 1. CONFIGURACIÓN DE MERCADO PAGO
 // Usa tu Access Token de producción (empieza con APP_USR-)
 mercadopago.configure({
-    access_token: 'TU_ACCESS_TOKEN_AQUÍ' 
+    access_token: 'APP_USR-3446947306015470-022015-0eadd73bad309d682d67155b9902caf9-2388126686' 
 });
 
 // 2. MIDDLEWARES (Configuraciones de seguridad y datos)
