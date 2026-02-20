@@ -29,36 +29,37 @@ app.post("/create_preference", async (req, res) => {
         }
 
         // Creamos la preferencia de Mercado Pago
-        let preference = {
+      let preference = {
             items: [
                 {
                     title: `Pedido DeMasita #${idPedido}`,
-                    unit_price: Number(total), // Forzamos que sea un número
+                    unit_price: Number(total),
                     quantity: 1,
-                    currency_id: 'MXN' // Cambia a tu moneda si no es México
+                    currency_id: 'MXN'
                 }
             ],
+            // --- CONFIGURACIÓN PARA IR DIRECTO A TARJETA ---
+            payment_methods: {
+                excluded_payment_types: [
+                    { id: "ticket" },       // Quita OXXO/Efectivo
+                    { id: "atm" },          // Quita Cajeros/Transferencias
+                    { id: "bank_transfer" } // Quita SPEI
+                ],
+                installments: 1, // Opcional: Solo 1 pago (sin meses)
+            },
+            // binary_mode: true hace que el pago se apruebe o rechace al instante
+            // sin quedar "pendiente"
+            binary_mode: true, 
+            
+            // Esto ayuda a que no sea obligatorio loguearse
             back_urls: {
                 success: "https://augedu6-dot.github.io/lukasecurity.github.io/seguimiento.html",
                 failure: "https://augedu6-dot.github.io/lukasecurity.github.io/carrito.html",
                 pending: "https://augedu6-dot.github.io/lukasecurity.github.io/seguimiento.html"
             },
             auto_return: "approved",
-            external_reference: idPedido, // Guardamos tu ID de pedido aquí también
+            external_reference: idPedido,
         };
-
-        const response = await mercadopago.preferences.create(preference);
-        
-        // Enviamos el link de pago (init_point) de vuelta a tu página
-        res.json({
-            init_point: response.body.init_point
-        });
-
-    } catch (error) {
-        console.error("Error en Mercado Pago:", error);
-        res.status(500).json({ error: "No se pudo crear el pago" });
-    }
-});
 
 // 5. INICIO DEL SERVIDOR
 const PORT = process.env.PORT || 3000;
