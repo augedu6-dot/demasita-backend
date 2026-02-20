@@ -1,43 +1,16 @@
 const express = require('express');
-const cors = require('cors');
-const { MercadoPagoConfig, Preference } = require('mercadopago');
-
+const cors = require('cors'); // <--- 1. ¡DEBES TENER ESTO!
 const app = express();
+
+app.use(cors()); // <--- 2. Habilita que tu web de GitHub pueda entrar
 app.use(express.json());
-app.use(cors()); // Permitir que tu web de GitHub acceda
 
-// Configura tus credenciales (Token de prueba o producción)
-const client = new MercadoPagoConfig({ accessToken: 'TU_ACCESS_TOKEN_AQUI' });
-
-app.post('/create_preference', async (req, res) => {
-    try {
-        const preference = new Preference(client);
-        
-        const result = await preference.create({
-            body: {
-                items: [
-                    {
-                        title: 'Pedido DeMasita - ' + req.body.idPedido,
-                        quantity: 1,
-                        unit_price: Number(req.body.total),
-                        currency_id: 'MXN'
-                    }
-                ],
-                back_urls: {
-                    success: "https://augedu6-dot.github.io/lukasecurity.github.io/seguimiento.html",
-                    failure: "https://augedu6-dot.github.io/lukasecurity.github.io/carrito.html",
-                    pending: "https://augedu6-dot.github.io/lukasecurity.github.io/seguimiento.html"
-                },
-                auto_return: "approved",
-            }
-        });
-
-        // Enviamos el link de pago al frontend
-        res.json({ id: result.id, init_point: result.init_point });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error al crear la preferencia");
-    }
+// 3. Esto quitará el "Cannot GET /" y te dirá que el servidor está vivo
+app.get("/", (req, res) => {
+    res.send("Servidor de DeMasita funcionando correctamente.");
 });
 
-app.listen(3000, () => console.log('Servidor corriendo en puerto 3000'));
+// 4. Tu ruta de pagos (asegúrate que sea POST)
+app.post("/create_preference", async (req, res) => {
+    // Aquí va tu código de Mercado Pago...
+});
