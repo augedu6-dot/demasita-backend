@@ -44,6 +44,9 @@ app.post("/create_preference", async (req, res) => {
                     { id: "atm" },          
                     { id: "bank_transfer" } 
                 ],
+                installments: 1 // Evita que el cliente elija 12 cuotas si no quieres
+            },
+            binary_mode: true,
             back_urls: {
                 success: "https://augedu6-dot.github.io/lukasecurity.github.io/seguimiento.html",
                 failure: "https://augedu6-dot.github.io/lukasecurity.github.io/carrito.html",
