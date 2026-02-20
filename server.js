@@ -1,16 +1,11 @@
 const express = require('express');
-const cors = require('cors'); // <--- 1. ¡DEBES TENER ESTO!
+const cors = require('cors'); // Requerimos el paquete
 const app = express();
 
-app.use(cors()); // <--- 2. Habilita que tu web de GitHub pueda entrar
+app.use(cors()); // <--- ¡ESTA LÍNEA ES LA MAGIA! Permite la conexión
 app.use(express.json());
 
-// 3. Esto quitará el "Cannot GET /" y te dirá que el servidor está vivo
-app.get("/", (req, res) => {
-    res.send("Servidor de DeMasita funcionando correctamente.");
-});
-
-// 4. Tu ruta de pagos (asegúrate que sea POST)
+// Tu ruta de Mercado Pago
 app.post("/create_preference", async (req, res) => {
-    // Aquí va tu código de Mercado Pago...
+    // ... tu código actual ...
 });
